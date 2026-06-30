@@ -2,11 +2,11 @@ import json
 from pathlib import Path
 
 from app.database.database import initialize_database
-from app.database.job_repository import save_job
+from app.database.job_repository import save_job, total_jobs
 from app.search.mock_search import MockSearch
 
 APP_NAME = "AI Job Hunter"
-VERSION = "1.2.0"
+VERSION = "1.3.0"
 
 
 def load_settings():
@@ -40,8 +40,7 @@ def main():
 
     print("\n🔍 Searching Jobs...\n")
 
-    search = MockSearch()
-    jobs = search.search()
+    jobs = MockSearch().search()
 
     print(f"Found {len(jobs)} Jobs\n")
 
@@ -50,10 +49,11 @@ def main():
         print(f"Company : {job.company}")
         print(f"Role    : {job.title}")
         print(f"Location: {job.location}")
-        print(f"Source  : {job.source}")
-        print(f"URL     : {job.url}")
 
         save_job(job)
+
+    print("\n📊 Database Statistics")
+    print(f"Total Jobs : {total_jobs()}")
 
     print("\n✅ Database Updated Successfully")
 
