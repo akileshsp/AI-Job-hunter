@@ -1,19 +1,49 @@
-from app.services.profile_service import ProfileService
+from app.ai.profile_extractor import ProfileExtractor
+from app.ai.resume_parser import ResumeParser
 
 
 class MatchEngine:
 
     def __init__(self):
-        profile = ProfileService()
-        self.skills = profile.get_skills()
+        parser = ResumeParser()
+        extractor = ProfileExtractor()
 
-    def calculate_score(self, title: str) -> int:
-        score = 50
+        resume_text = parser.parse("resume/resume.pdf")
+        self.profile = extractor.extract(resume_text)
 
-        title_lower = title.lower()
+    def calculate_score(self, job):
 
-        for skill in self.skills:
-            if skill.lower() in title_lower:
+        score = 0
+
+        title = job.title.lower()
+
+        # Match resume skills with job title
+        for skill in self.profile["skills"]:
+            if skill.lower() in title:
                 score += 10
+
+        # Pharma company bonus
+        pharma_companies = [
+            "pfizer",
+            "viatris",
+            "abbott",
+            "haleon",
+            "novo nordisk",
+            "biocon",
+            "syngene",
+            "baxter",
+            "medtronic"
+        ]
+
+        if job.company.lower() in pharma_companies:
+            score += 20
+
+        # Bengaluru bonus
+        if "bengaluru" in job.location.lower() or "bangalore" in job.location.lower():
+            score += 10
+
+        # Experience bonus
+        if self.profile["experience"] >= 10:
+            score += 10
 
         return min(score, 100)
