@@ -1,0 +1,23 @@
+{
+  "user": {
+    "name": "Akilesh",
+    "email": "akileshsp22@gmail.com",
+    "location": "Bengaluru",
+    "experience": 10,
+    "expected_ctc": "13-15 LPA"
+  },
+  "job_preferences": {
+    "locations": ["Bengaluru"],
+    "keywords": [
+      "Packaging Artwork",
+      "Packaging Designer",
+      "Packaging Engineer",
+      "Senior Packaging Specialist",
+      "Labeling Specialist",
+      "Esko Studio",
+      "Prepress",
+      "3D Packshots",
+      "Regulatory Packaging"
+    ]
+  }
+}
