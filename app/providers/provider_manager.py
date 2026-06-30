@@ -1,5 +1,5 @@
 from app.providers.mock_provider import MockProvider
-from app.providers.greenhouse_provider import GreenhouseProvider
+from app.providers.real_job_provider import RealJobProvider
 
 
 class ProviderManager:
@@ -8,7 +8,7 @@ class ProviderManager:
 
         self.providers = [
             MockProvider(),
-            GreenhouseProvider()
+            RealJobProvider()
         ]
 
     def search_jobs(self):
@@ -16,6 +16,9 @@ class ProviderManager:
         jobs = []
 
         for provider in self.providers:
+
+            print(f"🔍 Searching from {provider.__class__.__name__}...")
+
             jobs.extend(provider.search())
 
         return jobs
