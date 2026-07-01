@@ -1,24 +1,18 @@
 # Python
 __pycache__/
 *.py[cod]
-*.pyo
+*.swp
 
-# Virtual environments
-.venv/
-venv/
-
-# Environment files
-.env
+# Databases
+data/jobs.db
+*.db
 
 # Logs
 logs/
 
-# Database
-*.db
-*.sqlite3
-
-# macOS
-.DS_Store
-
-# VS Code
+# IDE
 .vscode/
+.idea/
+
+# OS
+.DS_Store
