@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>AI Job Hunter</title>
+
+    <link rel="stylesheet" href="/static/style.css">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>🚀 AI Job Hunter</h1>
+
+    <p>Your Personalized AI Job Search Assistant</p>
+
+    <div class="stats">
+
+        <div class="card">
+
+            <h2>{{ total_jobs }}</h2>
+
+            <p>Total Jobs</p>
+
+        </div>
+
+        <div class="card">
+
+            <h2>AI</h2>
+
+            <p>Resume Loaded</p>
+
+        </div>
+
+        <div class="card">
+
+            <h2>India</h2>
+
+            <p>Search Region</p>
+
+        </div>
+
+    </div>
+
+    <div class="search-box">
+
+        <form action="/results">
+
+            <input
+                type="text"
+                name="keyword"
+                placeholder="Packaging Designer"
+                value="Packaging Designer"
+            >
+
+            <select name="location">
+
+                <option>Bengaluru</option>
+                <option>Hyderabad</option>
+                <option>Chennai</option>
+                <option>Pune</option>
+                <option>Mumbai</option>
+                <option>Remote</option>
+
+            </select>
+
+            <button type="submit">
+
+                🔍 Search Jobs
+
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

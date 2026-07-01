@@ -1,21 +1,32 @@
-{
-  "companies": [
-    "Viatris",
-    "Pfizer",
-    "Abbott",
-    "Haleon",
-    "AstraZeneca",
-    "Novartis",
-    "Bayer",
-    "Sanofi",
-    "Dr. Reddy's",
-    "Cipla",
-    "Biocon",
-    "Syngene",
-    "Medtronic",
-    "Zimmer Biomet",
-    "HCLTech",
-    "SGS & Co",
-    "SGK"
-  ]
-}
+[
+    {
+        "company": "Viatris",
+        "slug": "viatris",
+        "industry": "pharma",
+        "ats": ["greenhouse"]
+    },
+    {
+        "company": "Haleon",
+        "slug": "haleon",
+        "industry": "pharma",
+        "ats": ["greenhouse"]
+    },
+    {
+        "company": "Roche",
+        "slug": "roche",
+        "industry": "pharma",
+        "ats": ["greenhouse"]
+    },
+    {
+        "company": "Amcor",
+        "slug": "amcor",
+        "industry": "packaging",
+        "ats": ["greenhouse"]
+    },
+    {
+        "company": "Mondi",
+        "slug": "mondi",
+        "industry": "packaging",
+        "ats": ["greenhouse"]
+    }
+]

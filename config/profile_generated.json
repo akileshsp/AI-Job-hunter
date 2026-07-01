@@ -5,23 +5,48 @@
         "Packaging Artwork",
         "Packaging",
         "Labeling",
+        "Prepress",
+        "Quality Control",
+        "Packaging Compliance",
+        "Print Production",
+        "3D Packshot"
+    ],
+    "tools": [
+        "Adobe Illustrator",
+        "Adobe Photoshop",
         "Esko Studio",
         "DeskPack",
         "WebCenter",
+        "Jira"
+    ],
+    "job_titles": [
+        "Packaging Designer",
+        "Packaging Artwork Specialist",
+        "Labeling Specialist",
+        "Prepress Executive",
+        "Production Executive",
+        "QC Executive"
+    ],
+    "search_queries": [
+        "Packaging Designer",
+        "Packaging Artwork Specialist",
+        "Labeling Specialist",
+        "Prepress Executive",
+        "Production Executive",
+        "QC Executive",
+        "Packaging Artwork",
+        "Packaging",
+        "Labeling",
+        "Prepress",
+        "Quality Control",
+        "Packaging Compliance",
+        "Print Production",
+        "3D Packshot",
         "Adobe Illustrator",
         "Adobe Photoshop",
-        "Jira",
-        "Prepress",
-        "3D Packshot",
-        "QC"
-    ],
-    "companies": [
-        "Viatris",
-        "Mylan",
-        "SGK",
-        "Schawk",
-        "SGSCO",
-        "Sun Branding",
-        "Stirred Creative"
+        "Esko Studio",
+        "DeskPack",
+        "WebCenter",
+        "Jira"
     ]
 }

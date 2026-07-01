@@ -1,108 +1,100 @@
 from app.ai.profile_extractor import ProfileExtractor
+from app.ai.profile_builder import ProfileBuilder
 from app.ai.resume_parser import ResumeParser
 
 
 class MatchEngine:
 
     def __init__(self):
+
         parser = ResumeParser()
         extractor = ProfileExtractor()
+        builder = ProfileBuilder()
 
         resume_text = parser.parse("resume/resume.pdf")
-        self.profile = extractor.extract(resume_text)
+
+        raw_profile = extractor.extract(resume_text)
+
+        self.profile = builder.build(raw_profile)
 
     def calculate_score(self, job):
 
-        score = 0
-        matched_skills = []
+        score = 0.0
 
-        # Search in both Job Title and Description
-        content = (job.title + " " + job.description).lower()
+        matched = []
 
-        # ---------------------------------
-        # Job Title Bonus (Max 40)
-        # ---------------------------------
-        title = job.title.lower()
+        content = f"{job.title} {job.description}".lower()
 
-        if "packaging" in title:
-            score += 20
+        # -----------------------------
+        # Skill Match (60)
+        # -----------------------------
+        skills = self.profile.get("skills", [])
 
-        if "artwork" in title:
-            score += 20
+        if skills:
 
-        # ---------------------------------
-        # Skill Matching (Max 30)
-        # ---------------------------------
-        skill_score = 0
+            per_skill = 60 / len(skills)
 
-        for skill in self.profile["skills"]:
+            for skill in skills:
 
-            if skill.lower() in content:
+                if skill.lower() in content:
 
-                if skill not in matched_skills:
-                    matched_skills.append(skill)
+                    matched.append(skill)
 
-                if skill_score < 30:
-                    skill_score += 5
+                    score += per_skill
 
-        score += skill_score
+        # -----------------------------
+        # Tool Match (20)
+        # -----------------------------
+        tools = self.profile.get("tools", [])
 
-        # ---------------------------------
-        # Pharma Company Bonus (10)
-        # ---------------------------------
-        pharma_companies = [
-            "pfizer",
-            "viatris",
-            "abbott",
-            "haleon",
-            "novo nordisk",
-            "biocon",
-            "syngene",
-            "baxter",
-            "medtronic"
-        ]
+        if tools:
 
-        if job.company.lower() in pharma_companies:
-            score += 10
+            per_tool = 20 / len(tools)
 
-        # ---------------------------------
-        # Location Bonus (10)
-        # ---------------------------------
-        if (
-            "bengaluru" in job.location.lower()
-            or "bangalore" in job.location.lower()
-        ):
-            score += 10
+            for tool in tools:
 
-        # ---------------------------------
-        # Experience Bonus (10)
-        # ---------------------------------
-        if self.profile["experience"] >= 10:
-            score += 10
+                if tool.lower() in content:
 
-        # ---------------------------------
-        # Save Matched Skills
-        # ---------------------------------
-        job.matched_skills = matched_skills
+                    score += per_tool
 
-        # ---------------------------------
-        # Final Score
-        # ---------------------------------
-        job.match_score = min(score, 100)
+        # -----------------------------
+        # Job Title Match (10)
+        # -----------------------------
+        for title in self.profile.get("job_titles", []):
 
-        # ---------------------------------
-        # Recommendation
-        # ---------------------------------
+            if title.lower() in job.title.lower():
+
+                score += 10
+
+                break
+
+        # -----------------------------
+        # Experience (5)
+        # -----------------------------
+        if self.profile.get("experience", 0) >= 5:
+
+            score += 5
+
+        # -----------------------------
+        # Remote Bonus (5)
+        # -----------------------------
+        if "remote" in job.location.lower():
+
+            score += 5
+
+        job.match_score = round(min(score, 100), 2)
+
+        job.matched_skills = matched
+
         if job.match_score >= 90:
             job.recommendation = "★★★★★ Excellent Match"
-
         elif job.match_score >= 75:
             job.recommendation = "★★★★☆ Very Good Match"
-
         elif job.match_score >= 60:
             job.recommendation = "★★★☆☆ Good Match"
-
+        elif job.match_score >= 40:
+            job.recommendation = "★★☆☆☆ Fair Match"
         else:
-            job.recommendation = "★★☆☆☆ Low Match"
+            job.recommendation = "★☆☆☆☆ Weak Match"
 
         return job.match_score

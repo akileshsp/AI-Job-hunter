@@ -1,0 +1,41 @@
+{
+  "greenhouse": [
+    "stripe",
+    "notion",
+    "cloudflare",
+    "datadog",
+    "fivetran",
+    "affirm",
+    "sourcegraph",
+    "elastic"
+  ],
+  "lever": [],
+  "workable": [],
+  "ashby": [],
+  "smartrecruiters": [],
+  "workday": [
+    "Viatris",
+    "Pfizer",
+    "Abbott",
+    "Haleon",
+    "AstraZeneca",
+    "Novartis",
+    "Bayer",
+    "Sanofi",
+    "Dr. Reddy's",
+    "Cipla",
+    "Biocon",
+    "Syngene",
+    "Medtronic",
+    "Zimmer Biomet"
+  ],
+  "successfactors": [
+    "Unilever",
+    "Nestle",
+    "Mondelez",
+    "Reckitt",
+    "Colgate",
+    "PepsiCo",
+    "P&G"
+  ]
+}

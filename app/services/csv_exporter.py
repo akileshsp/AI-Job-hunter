@@ -1,30 +1,39 @@
 import csv
-from pathlib import Path
 
 
 def export_jobs(jobs):
-    output_file = Path("data/jobs.csv")
 
-    with open(output_file, "w", newline="", encoding="utf-8") as file:
+    with open(
+        "data/jobs.csv",
+        "w",
+        newline="",
+        encoding="utf-8"
+    ) as file:
+
         writer = csv.writer(file)
 
         writer.writerow([
             "Company",
             "Job Title",
             "Location",
+            "AI Score",
+            "Recommendation",
+            "Matched Skills",
             "Source",
-            "Match Score",
-            "Apply URL"
+            "URL"
         ])
 
         for job in jobs:
+
             writer.writerow([
                 job.company,
                 job.title,
                 job.location,
-                job.source,
                 job.match_score,
+                getattr(job, "recommendation", ""),
+                ", ".join(job.matched_skills),
+                job.source,
                 job.url
             ])
 
-    print(f"📄 CSV Exported: {output_file}")
+    print("\n📄 CSV Exported: data/jobs.csv")

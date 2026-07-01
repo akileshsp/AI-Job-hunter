@@ -1,35 +1,50 @@
 import json
 import re
+from collections import OrderedDict
 from pathlib import Path
 
 
 class ProfileExtractor:
 
-    SKILLS = [
-        "Packaging Artwork",
-        "Packaging",
-        "Labeling",
-        "Regulatory Packaging",
+    TOOLS = [
+        "Adobe Illustrator",
+        "Adobe Photoshop",
+        "Adobe Acrobat",
         "Esko Studio",
         "DeskPack",
         "WebCenter",
-        "Adobe Illustrator",
-        "Adobe Photoshop",
-        "Jira",
+        "ArtPro",
+        "ArtiosCAD",
+        "Global Vision",
         "TrackWise",
-        "Prepress",
-        "3D Packshot",
-        "QC"
+        "Jira",
+        "SAP",
+        "Power BI",
+        "Excel",
+        "InDesign"
     ]
 
-    COMPANIES = [
-        "Viatris",
-        "Mylan",
-        "SGK",
-        "Schawk",
-        "SGSCO",
-        "Sun Branding",
-        "Stirred Creative"
+    INDUSTRIES = [
+        "Pharmaceutical",
+        "Packaging",
+        "Medical Device",
+        "FMCG",
+        "Printing",
+        "Food",
+        "Healthcare"
+    ]
+
+    JOB_PATTERNS = [
+        r"Senior\s+Packaging\s+[\w\s]+",
+        r"Packaging\s+Designer",
+        r"Packaging\s+Engineer",
+        r"Packaging\s+Specialist",
+        r"Packaging\s+Artwork\s+Specialist",
+        r"Artwork\s+Specialist",
+        r"Labeling\s+Specialist",
+        r"Prepress\s+Executive",
+        r"Production\s+Executive",
+        r"QC\s+Executive"
     ]
 
     def extract(self, text: str):
@@ -38,33 +53,80 @@ class ProfileExtractor:
             "name": "",
             "experience": 0,
             "skills": [],
-            "companies": []
+            "tools": [],
+            "job_titles": [],
+            "industries": []
         }
 
-        # Name
         lines = [line.strip() for line in text.splitlines() if line.strip()]
+
         if lines:
             profile["name"] = lines[0]
 
-        # Experience
-        match = re.search(r"(\d+)\+?\s*years", text, re.IGNORECASE)
-        if match:
-            profile["experience"] = int(match.group(1))
-
-        # Skills
         lower = text.lower()
-        for skill in self.SKILLS:
-            if skill.lower() in lower:
-                profile["skills"].append(skill)
 
-        # Companies
-        for company in self.COMPANIES:
-            if company.lower() in lower:
-                profile["companies"].append(company)
+        exp = re.search(r"(\d+)\+?\s*years", lower)
+
+        if exp:
+            profile["experience"] = int(exp.group(1))
+
+        words = re.findall(r"[A-Za-z][A-Za-z0-9&+.#/-]{2,}", text)
+
+        stop_words = {
+            "with", "from", "that", "this", "your", "have",
+            "will", "years", "year", "worked", "work",
+            "using", "experience", "specialist"
+        }
+
+        skills = []
+
+        for word in words:
+
+            w = word.strip()
+
+            if len(w) < 4:
+                continue
+
+            if w.lower() in stop_words:
+                continue
+
+            if w.isupper():
+                skills.append(w)
+
+            elif w[0].isupper():
+                skills.append(w)
+
+        profile["skills"] = list(
+            OrderedDict.fromkeys(skills)
+        )
+
+        for tool in self.TOOLS:
+
+            if tool.lower() in lower:
+                profile["tools"].append(tool)
+
+        for industry in self.INDUSTRIES:
+
+            if industry.lower() in lower:
+                profile["industries"].append(industry)
+
+        for pattern in self.JOB_PATTERNS:
+
+            for match in re.findall(pattern, text, re.IGNORECASE):
+                profile["job_titles"].append(match.strip())
+
+        profile["skills"] = profile["skills"][:40]
+        profile["tools"] = list(OrderedDict.fromkeys(profile["tools"]))
+        profile["industries"] = list(OrderedDict.fromkeys(profile["industries"]))
+        profile["job_titles"] = list(OrderedDict.fromkeys(profile["job_titles"]))
 
         Path("config").mkdir(exist_ok=True)
 
-        with open("config/profile_generated.json", "w", encoding="utf-8") as f:
+        with open(
+            "config/profile_generated.json",
+            "w",
+            encoding="utf-8"
+        ) as f:
             json.dump(profile, f, indent=4)
 
         return profile

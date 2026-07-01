@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Results</title>
+
+    <link rel="stylesheet" href="/static/style.css">
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>🚀 AI Job Hunter</h1>
+
+<h2>Matching Jobs</h2>
+
+{% if jobs %}
+
+    {% for job in jobs %}
+
+        <div class="job">
+
+            <h3>{{ job.title }}</h3>
+
+            <p><b>Company:</b> {{ job.company }}</p>
+
+            <p><b>Location:</b> {{ job.location }}</p>
+
+            <p><b>AI Score:</b> {{ job.match_score }}%</p>
+
+            <p>{{ job.recommendation }}</p>
+
+            <a href="{{ job.url }}" target="_blank">
+
+                Apply Now
+
+            </a>
+
+        </div>
+
+        <hr>
+
+    {% endfor %}
+
+{% else %}
+
+<h3>No jobs found.</h3>
+
+{% endif %}
+
+</div>
+
+</body>
+
+</html>

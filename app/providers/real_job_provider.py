@@ -1,30 +1,39 @@
 from app.providers.base_provider import BaseProvider
-from app.models.job import Job
-from app.job_sources.job_api import JobAPI
+from app.core.job_search_engine import JobSearchEngine
 
 
 class RealJobProvider(BaseProvider):
 
     def __init__(self):
-        self.api = JobAPI()
+
+        self.engine = JobSearchEngine()
+
+        # Temporary (we'll replace this with AI profile queries later)
+        self.keywords = [
+            "Packaging Designer"
+        ]
+
+        self.locations = [
+            "Bengaluru"
+        ]
 
     def search(self):
 
         jobs = []
 
-        keywords = [
-            "Packaging Specialist",
-            "Packaging Artwork",
-            "Labeling Specialist"
-        ]
+        for location in self.locations:
 
-        for keyword in keywords:
+            print(f"\n📍 {location}")
 
-            results = self.api.search(
-                keyword,
-                "Bengaluru"
-            )
+            for keyword in self.keywords:
 
-            jobs.extend(results)
+                print(f"🔎 {keyword}")
+
+                jobs.extend(
+                    self.engine.search(
+                        keyword,
+                        location
+                    )
+                )
 
         return jobs

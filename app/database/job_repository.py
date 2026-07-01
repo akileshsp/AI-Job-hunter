@@ -1,55 +1,124 @@
-from app.database.database import get_connection
+import os
+import sqlite3
+from datetime import datetime
+
+DB = "data/jobs.db"
+
+os.makedirs("data", exist_ok=True)
 
 
-def job_exists(url):
-    conn = get_connection()
-    cursor = conn.cursor()
+def get_connection():
 
-    cursor.execute(
-        "SELECT id FROM jobs WHERE url = ?",
-        (url,)
-    )
+    conn = sqlite3.connect(DB)
 
-    result = cursor.fetchone()
-    conn.close()
+    conn.execute("""
 
-    return result is not None
+        CREATE TABLE IF NOT EXISTS jobs (
+
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+            company TEXT,
+            title TEXT,
+            location TEXT,
+            source TEXT,
+            url TEXT,
+
+            ai_score INTEGER,
+            recommendation TEXT,
+            matched_skills TEXT,
+
+            created_at TEXT
+        )
+
+    """)
+
+    return conn
 
 
 def save_job(job):
-    if job_exists(job.url):
-        print(f"⚠️ Already Exists: {job.company}")
-        return
 
     conn = get_connection()
-    cursor = conn.cursor()
 
-    cursor.execute("""
-        INSERT INTO jobs
-        (company, title, location, source, url, match_score)
-        VALUES (?, ?, ?, ?, ?, ?)
+    cur = conn.cursor()
+
+    cur.execute("""
+
+        INSERT INTO jobs (
+
+            company,
+            title,
+            location,
+            source,
+            url,
+            ai_score,
+            recommendation,
+            matched_skills,
+            created_at
+
+        )
+
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+
     """, (
+
         job.company,
         job.title,
         job.location,
         job.source,
         job.url,
-        job.match_score
+        getattr(job, "match_score", 0),
+        getattr(job, "recommendation", ""),
+        ", ".join(getattr(job, "matched_skills", [])),
+        datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
     ))
 
     conn.commit()
     conn.close()
 
-    print(f"✅ Saved: {job.company}")
+
+def get_all_jobs():
+
+    conn = get_connection()
+
+    cur = conn.cursor()
+
+    cur.execute("""
+
+        SELECT
+
+            company,
+            title,
+            location,
+            source,
+            url,
+            ai_score,
+            recommendation,
+            matched_skills,
+            created_at
+
+        FROM jobs
+
+        ORDER BY id DESC
+
+    """)
+
+    rows = cur.fetchall()
+
+    conn.close()
+
+    return rows
 
 
 def total_jobs():
+
     conn = get_connection()
-    cursor = conn.cursor()
 
-    cursor.execute("SELECT COUNT(*) FROM jobs")
+    cur = conn.cursor()
 
-    total = cursor.fetchone()[0]
+    cur.execute("SELECT COUNT(*) FROM jobs")
+
+    total = cur.fetchone()[0]
 
     conn.close()
 

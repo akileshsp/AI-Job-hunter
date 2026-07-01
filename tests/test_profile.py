@@ -1,13 +1,16 @@
-from app.providers.mock_provider import MockProvider
+from app.ai.profile_analyzer import ProfileAnalyzer
+from app.ai.resume_parser import ResumeParser
 
-provider = MockProvider()
+parser = ResumeParser()
+analyzer = ProfileAnalyzer()
 
-jobs = provider.search()
+text = parser.parse("resume/resume.pdf")
 
-print(f"Found {len(jobs)} jobs\n")
+profile = analyzer.analyze(text)
 
-for job in jobs:
-    print(job.company)
-    print(job.title)
-    print(job.location)
+print("\n========== PROFILE ==========\n")
+
+for key, value in profile.items():
+    print(f"{key}:")
+    print(value)
     print()
