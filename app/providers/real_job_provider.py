@@ -1,39 +1,85 @@
 from app.providers.base_provider import BaseProvider
+
 from app.core.job_search_engine import JobSearchEngine
+
+from app.ai.resume_parser import ResumeParser
+from app.ai.profile_extractor import ProfileExtractor
+from app.ai.profile_builder import ProfileBuilder
 
 
 class RealJobProvider(BaseProvider):
 
-    def __init__(self):
+    def __init__(self, user_id=None):
 
-        self.engine = JobSearchEngine()
+        self.user_id = user_id
 
-        # Temporary (we'll replace this with AI profile queries later)
-        self.keywords = [
-            "Packaging Designer"
-        ]
+        self.engine = JobSearchEngine(user_id)
 
         self.locations = [
             "Bengaluru"
         ]
 
+        self.profile = self.load_profile()
+
+    def load_profile(self):
+
+        try:
+
+            resume_path = (
+                f"uploads/{self.user_id}/resume.pdf"
+                if self.user_id
+                else "resume/resume.pdf"
+            )
+
+            parser = ResumeParser()
+            extractor = ProfileExtractor()
+            builder = ProfileBuilder()
+
+            resume_text = parser.parse(resume_path)
+
+            profile = builder.build(
+                extractor.extract(resume_text)
+            )
+
+            print("\n🤖 AI Profile")
+
+            print(f"Name        : {profile['name']}")
+            print(f"Experience  : {profile['experience']}")
+
+            print("\n🎯 Job Titles")
+            for title in profile["job_titles"][:10]:
+                print(f"   • {title}")
+
+            print("\n🛠 Tools")
+            for tool in profile["tools"][:10]:
+                print(f"   • {tool}")
+
+            return profile
+
+        except Exception as e:
+
+            print(f"⚠ Profile generation failed : {e}")
+
+            return None
+
     def search(self):
+
+        if self.profile is None:
+
+            return []
 
         jobs = []
 
         for location in self.locations:
 
-            print(f"\n📍 {location}")
+            print(f"\n📍 Searching {location}")
 
-            for keyword in self.keywords:
+            jobs.extend(
 
-                print(f"🔎 {keyword}")
-
-                jobs.extend(
-                    self.engine.search(
-                        keyword,
-                        location
-                    )
+                self.engine.search(
+                    location
                 )
+
+            )
 
         return jobs

@@ -3,7 +3,6 @@
     "experience": 10,
     "skills": [
         "VIDYA",
-        "Senior",
         "Storage",
         "Backup",
         "Administrator",
@@ -46,17 +45,17 @@
         "Problem",
         "Change",
         "Management",
+        "AAABBBOOOUUUTTT",
+        "MMMEEE",
+        "PPPRRROOOFFFIIILLLEEE",
         "passionate",
-        "with",
         "over",
         "enterprise",
-        "storage",
-        "infrastructure"
+        "storage"
     ],
     "tools": [
         "Excel",
         "NetApp",
-        "Dell EMC",
         "PowerMax",
         "VMAX",
         "PowerScale",
@@ -64,18 +63,46 @@
         "OneFS",
         "Commvault",
         "Networker",
+        "Dell EMC",
+        "Brocade",
+        "ServiceNow",
+        "Linux",
+        "Windows Server",
+        "Azure",
+        "AWS"
+    ],
+    "job_titles": [
+        "VIDYA TV\nSenior Storage & Backup Administrator",
+        "Senior Storage & Backup Administrator",
+        "years of experience in\nAdministrator",
+        "Sep Service Delivery Specialist",
+        "Managed and mentored a team of Storage & Backup Administrator"
+    ],
+    "search_queries": [
+        "VIDYA TV\nSenior Storage & Backup Administrator",
+        "Senior Storage & Backup Administrator",
+        "years of experience in\nAdministrator",
+        "Sep Service Delivery Specialist",
+        "Managed and mentored a team of Storage & Backup Administrator",
+        "Excel",
+        "NetApp",
+        "PowerMax",
+        "VMAX",
+        "PowerScale",
+        "Isilon",
+        "OneFS",
+        "Commvault",
+        "Networker",
+        "Dell EMC",
+        "Brocade",
         "ServiceNow",
         "Linux",
         "Windows Server",
         "Azure",
         "AWS",
-        "Brocade"
-    ],
-    "job_titles": [
-        "Senior Storage & Backup Administrator",
-        "Oct - Present Assistant Consultant",
-        "Sep Service Delivery Specialist",
-        "Managed and mentored a team of Storage & Backup Administrator"
-    ],
-    "industries": []
+        "VIDYA",
+        "Storage",
+        "Backup",
+        "Administrator"
+    ]
 }

@@ -1,37 +1,44 @@
 import re
+from collections import OrderedDict
 
 
 class ProfileAnalyzer:
 
     TOOLS = [
+
         "Adobe Illustrator",
         "Adobe Photoshop",
+        "Adobe Acrobat",
         "Esko Studio",
         "DeskPack",
         "WebCenter",
+        "ArtiosCAD",
+        "Global Vision",
+        "TrackWise",
         "Jira",
-        "TrackWise"
-    ]
+        "SAP",
+        "Power BI",
+        "Excel",
+        "InDesign",
 
-    SKILLS = [
-        "Packaging Artwork",
-        "Packaging",
-        "Labeling",
-        "Prepress",
-        "Quality Control",
-        "Packaging Compliance",
-        "Print Production",
-        "3D Packshot"
-    ]
+        "NetApp",
+        "PowerMax",
+        "VMAX",
+        "PowerScale",
+        "Isilon",
+        "OneFS",
+        "Commvault",
+        "Networker",
+        "Dell EMC",
+        "Brocade",
+        "Cisco",
+        "ServiceNow",
+        "Linux",
+        "Windows Server",
+        "VMware",
+        "Azure",
+        "AWS"
 
-    JOB_TITLES = [
-        "Packaging Designer",
-        "Packaging Artwork Specialist",
-        "Labeling Specialist",
-        "Packaging Engineer",
-        "Prepress Executive",
-        "Production Executive",
-        "QC Executive"
     ]
 
     def analyze(self, text):
@@ -45,34 +52,112 @@ class ProfileAnalyzer:
             "search_queries": []
         }
 
-        lines = [line.strip() for line in text.splitlines() if line.strip()]
+        lines = [
+            line.strip()
+            for line in text.splitlines()
+            if line.strip()
+        ]
 
         if lines:
             profile["name"] = lines[0]
 
-        match = re.search(r"(\d+)\+?\s*years", text, re.IGNORECASE)
+        exp = re.search(
+            r"(\d+)\+?\s*years",
+            text,
+            re.IGNORECASE
+        )
 
-        if match:
-            profile["experience"] = int(match.group(1))
+        if exp:
+            profile["experience"] = int(exp.group(1))
 
         lower = text.lower()
 
-        for skill in self.SKILLS:
-            if skill.lower() in lower:
-                profile["skills"].append(skill)
-
         for tool in self.TOOLS:
+
             if tool.lower() in lower:
+
                 profile["tools"].append(tool)
 
-        for title in self.JOB_TITLES:
-            if title.lower() in lower:
-                profile["job_titles"].append(title)
+        titles = re.findall(
 
-        profile["search_queries"] = (
-            profile["job_titles"]
-            + profile["skills"]
-            + profile["tools"]
+            r"(Senior\s+[A-Za-z&/\-\s]+|Lead\s+[A-Za-z&/\-\s]+|Principal\s+[A-Za-z&/\-\s]+|[A-Za-z&/\-\s]+Engineer|[A-Za-z&/\-\s]+Administrator|[A-Za-z&/\-\s]+Specialist|[A-Za-z&/\-\s]+Designer|[A-Za-z&/\-\s]+Analyst)",
+
+            text,
+
+            re.IGNORECASE
+
         )
+
+        profile["job_titles"] = list(
+
+            OrderedDict.fromkeys(
+
+                [
+
+                    t.strip()
+
+                    for t in titles
+
+                    if len(t.strip()) > 4
+
+                ]
+
+            )
+
+        )
+
+        words = re.findall(
+
+            r"[A-Za-z][A-Za-z0-9+#./-]{3,}",
+
+            text
+
+        )
+
+        stop = {
+
+            "with",
+            "have",
+            "will",
+            "this",
+            "that",
+            "years",
+            "year",
+            "experience",
+            "experienced",
+            "working",
+            "senior",
+            "assistant"
+
+        }
+
+        skills = []
+
+        for word in words:
+
+            if word.lower() in stop:
+                continue
+
+            skills.append(word)
+
+        profile["skills"] = list(
+
+            OrderedDict.fromkeys(skills)
+
+        )[:50]
+
+        queries = []
+
+        queries.extend(profile["job_titles"])
+
+        queries.extend(profile["tools"])
+
+        queries.extend(profile["skills"])
+
+        profile["search_queries"] = list(
+
+            OrderedDict.fromkeys(queries)
+
+        )[:25]
 
         return profile

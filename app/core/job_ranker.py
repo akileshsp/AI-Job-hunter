@@ -4,30 +4,40 @@ class JobRanker:
 
         def score(job):
 
-            score = 0
+            total = getattr(job, "match_score", 0)
 
-            if hasattr(job, "match_score"):
-                score += job.match_score
+            title = (job.title or "").lower()
+            location = (job.location or "").lower()
 
-            if "Packaging" in job.title:
-                score += 20
+            # Senior roles
+            if "senior" in title:
+                total += 15
 
-            if "Label" in job.title:
-                score += 15
+            if "lead" in title:
+                total += 15
 
-            if "Artwork" in job.title:
-                score += 15
+            if "principal" in title:
+                total += 15
 
-            if "Remote" in job.location:
-                score += 5
+            if "manager" in title:
+                total += 10
 
-            return score
+            # Remote bonus
+            if "remote" in location:
+                total += 5
 
-        jobs.sort(
+            # Hybrid bonus
+            if "hybrid" in location:
+                total += 3
+
+            return total
+
+        ranked = sorted(
+            jobs,
             key=score,
             reverse=True
         )
 
-        print(f"⭐ Ranked {len(jobs)} jobs")
+        print(f"⭐ Ranked {len(ranked)} jobs")
 
-        return jobs
+        return ranked

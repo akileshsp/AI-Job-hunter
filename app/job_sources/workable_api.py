@@ -12,7 +12,7 @@ class WorkableAPI(BaseJobSource):
         "virtuagym"
     ]
 
-    def search(self, keyword, location):
+    def search(self, keyword="", location=""):
 
         jobs = []
 
@@ -22,9 +22,10 @@ class WorkableAPI(BaseJobSource):
 
             try:
 
-                url = f"https://{company}.workable.com/spi/v3/jobs"
-
-                response = requests.get(url, timeout=10)
+                response = requests.get(
+                    f"https://{company}.workable.com/spi/v3/jobs",
+                    timeout=20
+                )
 
                 if response.status_code != 200:
                     continue
@@ -33,28 +34,30 @@ class WorkableAPI(BaseJobSource):
 
                 for item in data.get("results", []):
 
-                    title = item.get("title", "")
-
-                    if keyword.lower() not in title.lower():
-                        continue
-
-                    city = ""
+                    city = location
 
                     if item.get("location"):
-                        city = item["location"].get("city", "")
+                        city = item["location"].get(
+                            "city",
+                            location
+                        )
 
                     jobs.append(
+
                         Job(
-                            title=title,
+                            title=item.get("title", ""),
                             company=company.title(),
-                            location=city if city else "Remote",
+                            location=city,
                             source="Workable",
-                            url=item.get("url", "")
+                            url=item.get("url", ""),
+                            description=""
                         )
+
                     )
 
-            except Exception:
-                pass
+            except Exception as e:
+
+                print(e)
 
         print(f"✅ Workable returned {len(jobs)} jobs")
 

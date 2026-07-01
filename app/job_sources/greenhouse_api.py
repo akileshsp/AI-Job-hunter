@@ -11,8 +11,7 @@ class GreenhouseAPI(BaseJobSource):
 
     def __init__(self):
 
-        with open("config/companies.json", "r") as f:
-
+        with open("config/companies.json", "r", encoding="utf-8") as f:
             companies = json.load(f)
 
         self.companies = []
@@ -25,7 +24,6 @@ class GreenhouseAPI(BaseJobSource):
                 ats = [ats]
 
             if "greenhouse" in ats:
-
                 self.companies.append(company)
 
     def search(self, keyword, location):
@@ -33,8 +31,7 @@ class GreenhouseAPI(BaseJobSource):
         jobs = []
         seen = set()
 
-        keyword = keyword.lower().strip()
-        requested_location = location.lower().strip()
+        requested_location = location.lower()
 
         for company in self.companies:
 
@@ -43,11 +40,12 @@ class GreenhouseAPI(BaseJobSource):
 
             print(f"🟢 Greenhouse :: {company_name}")
 
-            url = f"{self.BASE_URL}/{slug}/jobs"
-
             try:
 
-                response = requests.get(url, timeout=15)
+                response = requests.get(
+                    f"{self.BASE_URL}/{slug}/jobs",
+                    timeout=20
+                )
 
                 if response.status_code != 200:
                     continue
@@ -56,22 +54,17 @@ class GreenhouseAPI(BaseJobSource):
 
                 for item in data.get("jobs", []):
 
-                    title = item.get("title", "") or ""
-                    description = item.get("content", "") or ""
+                    title = item.get("title", "")
 
-                    searchable = f"{title} {description}".lower()
-
-                    if keyword not in searchable:
-                        continue
+                    description = item.get("content", "")
 
                     job_location = ""
 
                     if isinstance(item.get("location"), dict):
                         job_location = item["location"].get("name", "")
+
                     elif isinstance(item.get("location"), str):
                         job_location = item["location"]
-
-                    job_location = job_location.strip()
 
                     if requested_location != "remote":
 
@@ -83,33 +76,35 @@ class GreenhouseAPI(BaseJobSource):
                             ):
                                 continue
 
-                    job_url = item.get("absolute_url", "")
+                    url = item.get("absolute_url", "")
 
-                    unique_key = (
+                    key = (
                         title.lower(),
                         company_name.lower(),
-                        job_url
+                        url
                     )
 
-                    if unique_key in seen:
+                    if key in seen:
                         continue
 
-                    seen.add(unique_key)
+                    seen.add(key)
 
                     jobs.append(
+
                         Job(
                             title=title,
                             company=company_name,
-                            location=job_location if job_location else location,
+                            location=job_location,
                             source="Greenhouse",
-                            url=job_url,
+                            url=url,
                             description=description
                         )
+
                     )
 
             except Exception as e:
 
-                print(f"❌ {company_name}: {e}")
+                print(e)
 
         print(f"✅ Greenhouse returned {len(jobs)} jobs")
 

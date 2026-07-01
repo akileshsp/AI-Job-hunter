@@ -12,24 +12,23 @@ def get_connection():
     conn = sqlite3.connect(DB)
 
     conn.execute("""
+    CREATE TABLE IF NOT EXISTS jobs (
 
-        CREATE TABLE IF NOT EXISTS jobs (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
 
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
+        company TEXT NOT NULL,
+        title TEXT NOT NULL,
+        location TEXT,
+        source TEXT,
+        url TEXT UNIQUE,
 
-            company TEXT,
-            title TEXT,
-            location TEXT,
-            source TEXT,
-            url TEXT,
+        ai_score INTEGER DEFAULT 0,
+        recommendation TEXT,
+        matched_skills TEXT,
 
-            ai_score INTEGER,
-            recommendation TEXT,
-            matched_skills TEXT,
+        created_at TEXT
 
-            created_at TEXT
-        )
-
+    )
     """)
 
     return conn
@@ -43,21 +42,21 @@ def save_job(job):
 
     cur.execute("""
 
-        INSERT INTO jobs (
+    INSERT OR IGNORE INTO jobs (
 
-            company,
-            title,
-            location,
-            source,
-            url,
-            ai_score,
-            recommendation,
-            matched_skills,
-            created_at
+        company,
+        title,
+        location,
+        source,
+        url,
+        ai_score,
+        recommendation,
+        matched_skills,
+        created_at
 
-        )
+    )
 
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+    VALUES (?,?,?,?,?,?,?,?,?)
 
     """, (
 
@@ -74,6 +73,7 @@ def save_job(job):
     ))
 
     conn.commit()
+
     conn.close()
 
 
@@ -85,21 +85,23 @@ def get_all_jobs():
 
     cur.execute("""
 
-        SELECT
+    SELECT
 
-            company,
-            title,
-            location,
-            source,
-            url,
-            ai_score,
-            recommendation,
-            matched_skills,
-            created_at
+        id,
+        company,
+        title,
+        location,
+        source,
+        url,
+        ai_score,
+        recommendation,
+        matched_skills,
+        created_at
 
-        FROM jobs
+    FROM jobs
 
-        ORDER BY id DESC
+    ORDER BY ai_score DESC,
+             created_at DESC
 
     """)
 

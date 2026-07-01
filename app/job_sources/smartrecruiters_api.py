@@ -24,12 +24,10 @@ class SmartRecruitersAPI(BaseJobSource):
 
             try:
 
-                url = (
-                    f"https://api.smartrecruiters.com/v1/companies/"
-                    f"{company}/postings"
+                response = requests.get(
+                    f"https://api.smartrecruiters.com/v1/companies/{company}/postings",
+                    timeout=20
                 )
-
-                response = requests.get(url, timeout=10)
 
                 if response.status_code != 200:
                     continue
@@ -38,25 +36,28 @@ class SmartRecruitersAPI(BaseJobSource):
 
                 for item in data.get("content", []):
 
-                    title = item.get("name", "")
-
-                    if keyword.lower() not in title.lower():
-                        continue
-
-                    city = item.get("location", {}).get("city", "")
+                    city = item.get(
+                        "location",
+                        {}
+                    ).get(
+                        "city",
+                        location
+                    )
 
                     jobs.append(
                         Job(
-                            title=title,
+                            title=item.get("name", ""),
                             company=company,
-                            location=city if city else "Remote",
+                            location=city,
                             source="SmartRecruiters",
-                            url=item.get("ref", "")
+                            url=item.get("ref", ""),
+                            description=""
                         )
                     )
 
-            except Exception:
-                pass
+            except Exception as e:
+
+                print(e)
 
         print(f"✅ SmartRecruiters returned {len(jobs)} jobs")
 

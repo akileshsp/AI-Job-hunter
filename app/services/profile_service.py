@@ -7,22 +7,39 @@ from app.ai.resume_parser import ResumeParser
 
 class ProfileService:
 
-    def __init__(self, resume_path="resume/resume.pdf"):
+    def __init__(self, user_id=None):
+
+        if user_id:
+
+            resume_path = f"uploads/{user_id}/resume.pdf"
+
+            profile_path = f"uploads/profiles/{user_id}.json"
+
+        else:
+
+            resume_path = "resume/resume.pdf"
+
+            profile_path = "config/profile_generated.json"
 
         parser = ResumeParser()
+
         analyzer = ProfileAnalyzer()
 
         resume_text = parser.parse(resume_path)
 
         self.profile = analyzer.analyze(resume_text)
 
-        Path("config").mkdir(exist_ok=True)
+        Path(profile_path).parent.mkdir(
+            parents=True,
+            exist_ok=True
+        )
 
         with open(
-            "config/profile_generated.json",
+            profile_path,
             "w",
             encoding="utf-8"
         ) as f:
+
             json.dump(
                 self.profile,
                 f,
@@ -30,17 +47,34 @@ class ProfileService:
                 ensure_ascii=False
             )
 
+    def get_profile(self):
+
+        return self.profile
+
     def get_skills(self):
-        return self.profile.get("skills", [])
+
+        return self.profile.get(
+            "skills",
+            []
+        )
 
     def get_tools(self):
-        return self.profile.get("tools", [])
+
+        return self.profile.get(
+            "tools",
+            []
+        )
 
     def get_roles(self):
-        return self.profile.get("job_titles", [])
+
+        return self.profile.get(
+            "job_titles",
+            []
+        )
 
     def get_queries(self):
-        return self.profile.get("search_queries", [])
 
-    def get_profile(self):
-        return self.profile
+        return self.profile.get(
+            "search_queries",
+            []
+        )

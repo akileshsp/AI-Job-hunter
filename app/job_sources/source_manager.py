@@ -1,4 +1,5 @@
 from concurrent.futures import ThreadPoolExecutor, as_completed
+from time import perf_counter
 
 from app.job_sources.greenhouse_api import GreenhouseAPI
 from app.job_sources.lever_api import LeverAPI
@@ -11,41 +12,93 @@ class SourceManager:
     def __init__(self):
 
         self.sources = [
+
             GreenhouseAPI(),
             LeverAPI(),
             WorkableAPI(),
             SmartRecruitersAPI()
+
         ]
 
     def _search_source(self, source, keyword, location):
 
-        print(f"🔍 Searching from {source.__class__.__name__}")
+        start = perf_counter()
+
+        print(f"\n🚀 {source.__class__.__name__} started")
 
         try:
-            return source.search(keyword, location)
+
+            jobs = source.search(
+                keyword,
+                location
+            )
+
+            elapsed = perf_counter() - start
+
+            print(
+                f"✅ {source.__class__.__name__} : "
+                f"{len(jobs)} jobs "
+                f"({elapsed:.2f}s)"
+            )
+
+            return jobs
 
         except Exception as e:
 
-            print(f"❌ {source.__class__.__name__}: {e}")
+            elapsed = perf_counter() - start
+
+            print(
+                f"❌ {source.__class__.__name__} failed "
+                f"({elapsed:.2f}s)"
+            )
+
+            print(e)
+
             return []
 
-    def search_all(self, keyword, location):
+    def search_all(self, keyword="", location=""):
 
         jobs = []
 
-        with ThreadPoolExecutor(max_workers=len(self.sources)) as executor:
+        start = perf_counter()
 
-            futures = [
+        with ThreadPoolExecutor(
+            max_workers=len(self.sources)
+        ) as executor:
+
+            futures = {
+
                 executor.submit(
                     self._search_source,
                     source,
                     keyword,
                     location
-                )
+                ): source
+
                 for source in self.sources
-            ]
+
+            }
 
             for future in as_completed(futures):
-                jobs.extend(future.result())
+
+                try:
+
+                    jobs.extend(
+                        future.result()
+                    )
+
+                except Exception as e:
+
+                    print(e)
+
+        elapsed = perf_counter() - start
+
+        print(
+            f"\n🎯 Total jobs fetched : {len(jobs)}"
+        )
+
+        print(
+            f"⏱ Total search time : {elapsed:.2f}s\n"
+        )
 
         return jobs
