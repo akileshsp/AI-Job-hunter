@@ -1,10 +1,7 @@
 from app.providers.aggregator import JobAggregator
-
 from app.core.job_deduplicator import JobDeduplicator
 from app.core.job_ranker import JobRanker
-
 from app.ai.job_matcher import JobMatcher
-
 from app.services.profile_service import ProfileService
 
 
@@ -13,11 +10,8 @@ class JobSearchEngine:
     def __init__(self, user_id=None):
 
         self.aggregator = JobAggregator()
-
         self.deduplicator = JobDeduplicator()
-
         self.ranker = JobRanker()
-
         self.matcher = JobMatcher()
 
         self.profile = ProfileService(
@@ -33,7 +27,7 @@ class JobSearchEngine:
             location
         )
 
-        print(f"\n📥 Total Retrieved : {len(jobs)}")
+        print(f"\n📥 Retrieved : {len(jobs)}")
 
         jobs = self.deduplicator.remove_duplicates(
             jobs
@@ -41,11 +35,11 @@ class JobSearchEngine:
 
         print(f"🧹 After Deduplication : {len(jobs)}")
 
-        matched_jobs = []
+        matched = []
 
         for job in jobs:
 
-            matched_jobs.append(
+            matched.append(
 
                 self.matcher.match(
                     self.profile,
@@ -54,10 +48,10 @@ class JobSearchEngine:
 
             )
 
-        ranked_jobs = self.ranker.rank(
-            matched_jobs
+        ranked = self.ranker.rank(
+            matched
         )
 
-        print(f"⭐ Final Ranked Jobs : {len(ranked_jobs)}")
+        print(f"⭐ Ranked : {len(ranked)}")
 
-        return ranked_jobs
+        return ranked

@@ -1,68 +1,69 @@
-from app.job_sources.greenhouse_api import GreenhouseAPI
-from app.job_sources.lever_api import LeverAPI
-from app.job_sources.workable_api import WorkableAPI
-from app.job_sources.smartrecruiters_api import SmartRecruitersAPI
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
-try:
-    from app.job_sources.workday_api import WorkdayAPI
-except Exception:
-    WorkdayAPI = None
+from app.job_sources.provider_registry import get_providers
 
 
 class JobAggregator:
 
     def __init__(self):
 
-        self.providers = [
+        self.providers = get_providers()
 
-            GreenhouseAPI(),
+    def _search_provider(self, provider, keyword, location):
 
-            LeverAPI(),
+        print(f"🚀 {provider.__class__.__name__}")
 
-            WorkableAPI(),
+        try:
 
-            SmartRecruitersAPI()
-
-        ]
-
-        if WorkdayAPI:
-            self.providers.append(
-                WorkdayAPI()
+            jobs = provider.search(
+                keyword,
+                location
             )
+
+            print(
+                f"✅ {provider.__class__.__name__}: {len(jobs)} jobs"
+            )
+
+            return jobs
+
+        except Exception as e:
+
+            print(
+                f"❌ {provider.__class__.__name__}: {e}"
+            )
+
+            return []
 
     def search(self, keyword="", location=""):
 
         jobs = []
 
-        for provider in self.providers:
+        with ThreadPoolExecutor(
+            max_workers=len(self.providers)
+        ) as executor:
 
-            print(
-                f"\n🚀 {provider.__class__.__name__}"
-            )
+            futures = [
 
-            try:
-
-                provider_jobs = provider.search(
+                executor.submit(
+                    self._search_provider,
+                    provider,
                     keyword,
                     location
                 )
 
-                print(
-                    f"   {len(provider_jobs)} jobs"
+                for provider in self.providers
+
+            ]
+
+            for future in as_completed(futures):
+
+                jobs.extend(
+                    future.result()
                 )
-
-                jobs.extend(provider_jobs)
-
-            except Exception as e:
-
-                print(
-                    f"❌ {provider.__class__.__name__}"
-                )
-
-                print(e)
 
         print(
-            f"\n✅ Aggregated {len(jobs)} jobs"
+            f"\n🎯 Total Aggregated Jobs : {len(jobs)}"
         )
 
         return jobs
+    

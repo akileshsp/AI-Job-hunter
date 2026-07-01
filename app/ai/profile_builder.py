@@ -1,57 +1,68 @@
 from collections import OrderedDict
 
+from app.ai.query_generator import QueryGenerator
+
 
 class ProfileBuilder:
 
+    MAX_JOB_TITLES = 10
+    MAX_SKILLS = 15
+    MAX_TOOLS = 10
+    MAX_INDUSTRIES = 5
+
+    def __init__(self):
+
+        self.generator = QueryGenerator()
+
+    def unique(self, values):
+
+        cleaned = []
+
+        for value in values:
+
+            if not value:
+                continue
+
+            value = value.strip()
+
+            if len(value) < 3:
+                continue
+
+            cleaned.append(value)
+
+        return list(
+            OrderedDict.fromkeys(cleaned)
+        )
+
     def build(self, profile):
 
-        skills = list(
-            OrderedDict.fromkeys(
-                profile.get("skills", [])
-            )
-        )
+        job_titles = self.unique(
+            profile.get("job_titles", [])
+        )[:self.MAX_JOB_TITLES]
 
-        tools = list(
-            OrderedDict.fromkeys(
-                profile.get("tools", [])
-            )
-        )
+        skills = self.unique(
+            profile.get("skills", [])
+        )[:self.MAX_SKILLS]
 
-        job_titles = list(
-            OrderedDict.fromkeys(
-                profile.get("job_titles", [])
-            )
-        )
+        tools = self.unique(
+            profile.get("tools", [])
+        )[:self.MAX_TOOLS]
 
-        industries = list(
-            OrderedDict.fromkeys(
-                profile.get("industries", [])
-            )
-        )
+        industries = self.unique(
+            profile.get("industries", [])
+        )[:self.MAX_INDUSTRIES]
 
-        search_queries = []
+        profile = {
 
-        search_queries.extend(job_titles[:10])
+            "name": profile.get(
+                "name",
+                ""
+            ),
 
-        search_queries.extend(tools[:10])
-
-        search_queries.extend(skills[:10])
-
-        search_queries = [
-
-            q.strip()
-
-            for q in OrderedDict.fromkeys(search_queries)
-
-            if q and len(q.strip()) > 2
-
-        ]
-
-        return {
-
-            "name": profile.get("name", ""),
-
-            "experience": profile.get("experience", 0),
+            "experience": profile.get(
+                "experience",
+                0
+            ),
 
             "skills": skills,
 
@@ -59,8 +70,12 @@ class ProfileBuilder:
 
             "job_titles": job_titles,
 
-            "industries": industries,
-
-            "search_queries": search_queries
+            "industries": industries
 
         }
+
+        profile["search_queries"] = (
+            self.generator.build(profile)
+        )
+
+        return profile

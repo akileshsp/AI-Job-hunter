@@ -32,54 +32,45 @@ class RealJobProvider(BaseProvider):
             )
 
             parser = ResumeParser()
+
             extractor = ProfileExtractor()
+
             builder = ProfileBuilder()
 
-            resume_text = parser.parse(resume_path)
-
             profile = builder.build(
-                extractor.extract(resume_text)
+
+                extractor.extract(
+
+                    parser.parse(resume_path)
+
+                )
+
             )
 
-            print("\n🤖 AI Profile")
-
-            print(f"Name        : {profile['name']}")
-            print(f"Experience  : {profile['experience']}")
-
-            print("\n🎯 Job Titles")
-            for title in profile["job_titles"][:10]:
-                print(f"   • {title}")
-
-            print("\n🛠 Tools")
-            for tool in profile["tools"][:10]:
-                print(f"   • {tool}")
+            print("\n🤖 AI Profile Loaded")
 
             return profile
 
         except Exception as e:
 
-            print(f"⚠ Profile generation failed : {e}")
+            print(e)
 
             return None
 
     def search(self):
 
-        if self.profile is None:
+        if not self.profile:
 
             return []
 
-        jobs = []
+        all_jobs = []
 
         for location in self.locations:
 
-            print(f"\n📍 Searching {location}")
+            print(f"\n📍 {location}")
 
-            jobs.extend(
+            jobs = self.engine.search(location)
 
-                self.engine.search(
-                    location
-                )
+            all_jobs.extend(jobs)
 
-            )
-
-        return jobs
+        return all_jobs

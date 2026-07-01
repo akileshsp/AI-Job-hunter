@@ -14,9 +14,11 @@ class LeverAPI(BaseJobSource):
         "scale-ai"
     ]
 
-    def search(self, keyword, location):
+    def search(self, keyword="", location=""):
 
         jobs = []
+
+        keyword = keyword.lower().strip()
 
         for company in self.COMPANIES:
 
@@ -26,7 +28,7 @@ class LeverAPI(BaseJobSource):
 
                 response = requests.get(
                     f"https://api.lever.co/v0/postings/{company}?mode=json",
-                    timeout=20
+                    timeout=10
                 )
 
                 if response.status_code != 200:
@@ -34,10 +36,31 @@ class LeverAPI(BaseJobSource):
 
                 for item in response.json():
 
+                    title = item.get("text", "")
+
+                    description = item.get(
+                        "descriptionPlain",
+                        ""
+                    )
+
+                    searchable = (
+                        title + " " + description
+                    ).lower()
+
+                    if keyword:
+
+                        if keyword not in searchable:
+
+                            continue
+
                     jobs.append(
+
                         Job(
-                            title=item.get("text", ""),
+
+                            title=title,
+
                             company=company.title(),
+
                             location=item.get(
                                 "categories",
                                 {}
@@ -45,10 +68,18 @@ class LeverAPI(BaseJobSource):
                                 "location",
                                 location
                             ),
+
                             source="Lever",
-                            url=item.get("hostedUrl", ""),
-                            description=""
+
+                            url=item.get(
+                                "hostedUrl",
+                                ""
+                            ),
+
+                            description=description
+
                         )
+
                     )
 
             except Exception as e:

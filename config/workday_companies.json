@@ -1,0 +1,22 @@
+[
+    {
+        "company": "RTX",
+        "url": "https://rtx.wd5.myworkdayjobs.com/wday/cxs/rtx/External/jobPostings"
+    },
+    {
+        "company": "Medtronic",
+        "url": "https://medtronic.wd1.myworkdayjobs.com/wday/cxs/medtronic/MedtronicCareers/jobPostings"
+    },
+    {
+        "company": "Thermo Fisher Scientific",
+        "url": "https://thermofisher.wd5.myworkdayjobs.com/wday/cxs/thermofisher/External/jobPostings"
+    },
+    {
+        "company": "Stryker",
+        "url": "https://stryker.wd1.myworkdayjobs.com/wday/cxs/stryker/External/jobPostings"
+    },
+    {
+        "company": "GE HealthCare",
+        "url": "https://gehealthcare.wd3.myworkdayjobs.com/wday/cxs/gehealthcare/External/jobPostings"
+    }
+]
