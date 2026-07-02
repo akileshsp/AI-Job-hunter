@@ -57,19 +57,23 @@ class RealJobProvider(BaseProvider):
 
             return None
 
-    def search(self):
+    def search(self, keyword="", location=None):
 
         if not self.profile:
-
             return []
 
         all_jobs = []
 
-        for location in self.locations:
+        locations = [location] if location else self.locations
 
-            print(f"\n📍 {location}")
+        for loc in locations:
 
-            jobs = self.engine.search(location)
+            print(f"\n📍 {loc}")
+
+            jobs = self.engine.search(
+                keyword,
+                loc
+            )
 
             all_jobs.extend(jobs)
 

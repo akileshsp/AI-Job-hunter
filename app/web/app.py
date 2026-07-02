@@ -150,6 +150,11 @@ def results():
     if "user" not in session:
         return redirect("/login")
 
+    keyword = request.args.get(
+        "keyword",
+        ""
+    )
+
     location = request.args.get(
         "location",
         "Bengaluru"
@@ -159,9 +164,10 @@ def results():
         session["user"]["id"]
     )
 
-    provider.locations = [location]
-
-    jobs = provider.search()
+    jobs = provider.search(
+        keyword=keyword,
+        location=location
+    )
 
     jobs.sort(
         key=lambda j: getattr(
@@ -175,7 +181,7 @@ def results():
     return render_template(
         "results.html",
         jobs=jobs,
-        keyword="AI Smart Search",
+        keyword=keyword,
         location=location,
         total_jobs=total_jobs(),
         user=session["user"]

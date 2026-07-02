@@ -1,0 +1,48 @@
+company,slug,industry,ats
+Viatris,viatris,Pharmaceutical,workday
+Pfizer,pfizer,Pharmaceutical,workday
+GSK,gsk,Pharmaceutical,workday
+Sanofi,sanofi,Pharmaceutical,workday
+Bayer,bayer,Pharmaceutical,workday
+Roche,roche,Pharmaceutical,smartrecruiters
+Novartis,novartis,Pharmaceutical,workday
+Abbott,abbott,Medical Devices,workday
+Medtronic,medtronic,Medical Devices,workday
+Stryker,stryker,Medical Devices,workday
+GE HealthCare,gehealthcare,Medical Devices,workday
+Thermo Fisher Scientific,thermofisher,Medical Devices,workday
+Danaher,danaher,Medical Devices,smartrecruiters
+Philips,philips,Medical Devices,smartrecruiters
+Bosch,bosch,Engineering,smartrecruiters
+Amcor,amcor,Packaging,workday
+Huhtamaki,huhtamaki,Packaging,workday
+Gerresheimer,gerresheimer,Packaging,workday
+SCHOTT,schott,Packaging,workday
+West Pharmaceutical Services,westpharma,Packaging,workday
+Berry Global,berryglobal,Packaging,workday
+Sonoco,sonoco,Packaging,workday
+Aptar,aptar,Packaging,workday
+Constantia Flexibles,constantia,Packaging,workday
+Mondi,mondi,Packaging,workday
+Smurfit Westrock,smurfitwestrock,Packaging,workday
+Unilever,unilever,FMCG,workday
+Nestlé,nestle,FMCG,workday
+Mondelēz,mondelez,FMCG,workday
+PepsiCo,pepsico,FMCG,workday
+Coca-Cola,cocacola,FMCG,workday
+Reckitt,reckitt,FMCG,workday
+Procter & Gamble,pg,FMCG,workday
+ITC,itc,FMCG,workday
+Britannia,britannia,FMCG,workday
+Dabur,dabur,FMCG,workday
+Marico,marico,FMCG,workday
+Stripe,stripe,Software,greenhouse
+Figma,figma,Software,greenhouse
+Dropbox,dropbox,Software,greenhouse
+Coinbase,coinbase,Software,greenhouse
+Datadog,datadog,Software,greenhouse
+GitLab,gitlab,Software,greenhouse
+Spotify,spotify,Software,lever
+Coupa,coupa,Software,lever
+OpenAI,openai,AI,ashby
+Notion,notion,Software,ashby

@@ -18,12 +18,12 @@ class JobSearchEngine:
             user_id
         ).get_profile()
 
-    def search(self, location):
+    def search(self, keyword="", location=""):
 
         print("\n🚀 AI Job Hunter Search Started")
 
         jobs = self.aggregator.search(
-            "",
+            keyword,
             location
         )
 
@@ -40,12 +40,10 @@ class JobSearchEngine:
         for job in jobs:
 
             matched.append(
-
                 self.matcher.match(
                     self.profile,
                     job
                 )
-
             )
 
         ranked = self.ranker.rank(

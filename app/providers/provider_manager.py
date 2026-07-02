@@ -1,42 +1,92 @@
-from app.providers.real_job_provider import RealJobProvider
-from app.providers.rss_provider import RSSProvider
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from time import perf_counter
+
+from app.job_providers.base_provider import BaseProvider
 
 
 class ProviderManager:
 
-    def __init__(self):
+    def __init__(self, providers: list[BaseProvider]):
 
-        self.providers = [
-            RealJobProvider(),
-            RSSProvider()
-        ]
+        self.providers = providers
 
-    def search_jobs(self):
+    def _run_provider(
+        self,
+        provider: BaseProvider,
+        keyword: str,
+        location: str
+    ):
+
+        start = perf_counter()
+
+        try:
+
+            jobs = provider.search(
+                keyword,
+                location
+            )
+
+            elapsed = perf_counter() - start
+
+            print(
+                f"✅ {provider.name:<20}"
+                f"{len(jobs):>5} jobs"
+                f"  ({elapsed:.2f}s)"
+            )
+
+            return jobs
+
+        except Exception as e:
+
+            elapsed = perf_counter() - start
+
+            print(
+                f"❌ {provider.name:<20}"
+                f"FAILED ({elapsed:.2f}s)"
+            )
+
+            print(e)
+
+            return []
+
+    def search(
+        self,
+        keyword="",
+        location=""
+    ):
 
         jobs = []
-        seen = set()
 
-        for provider in self.providers:
+        start = perf_counter()
 
-            print(f"\n🔍 Searching from {provider.__class__.__name__}...")
+        with ThreadPoolExecutor(
+            max_workers=max(1, len(self.providers))
+        ) as executor:
 
-            try:
+            futures = [
 
-                provider_jobs = provider.search()
+                executor.submit(
+                    self._run_provider,
+                    provider,
+                    keyword,
+                    location
+                )
 
-                for job in provider_jobs:
+                for provider in self.providers
 
-                    key = (
-                        job.company.lower(),
-                        job.title.lower()
-                    )
+            ]
 
-                    if key not in seen:
-                        seen.add(key)
-                        jobs.append(job)
+            for future in as_completed(futures):
 
-            except Exception as e:
+                jobs.extend(
+                    future.result()
+                )
 
-                print(f"❌ {provider.__class__.__name__}: {e}")
+        elapsed = perf_counter() - start
+
+        print("\n" + "=" * 60)
+        print(f"🎯 Total Jobs : {len(jobs)}")
+        print(f"⏱ Total Time : {elapsed:.2f}s")
+        print("=" * 60)
 
         return jobs

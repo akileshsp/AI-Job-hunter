@@ -1,0 +1,22 @@
+[
+  {
+    "company": "OpenAI",
+    "slug": "openai"
+  },
+  {
+    "company": "Notion",
+    "slug": "notion"
+  },
+  {
+    "company": "Vercel",
+    "slug": "vercel"
+  },
+  {
+    "company": "Linear",
+    "slug": "linear"
+  },
+  {
+    "company": "Cursor",
+    "slug": "cursor"
+  }
+]

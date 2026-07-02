@@ -107,15 +107,41 @@ def initialize_database():
 
             job_id INTEGER,
 
-            saved_at TEXT DEFAULT CURRENT_TIMESTAMP,
+            saved_date TEXT DEFAULT CURRENT_TIMESTAMP,
 
             FOREIGN KEY(user_id)
-
-            REFERENCES users(id),
+                REFERENCES users(id),
 
             FOREIGN KEY(job_id)
+                REFERENCES jobs(id)
 
-            REFERENCES jobs(id)
+        )
+
+    """)
+
+    # ---------------- APPLIED JOBS ----------------
+
+    cursor.execute("""
+
+        CREATE TABLE IF NOT EXISTS applied_jobs (
+
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+            user_id INTEGER,
+
+            job_id INTEGER,
+
+            status TEXT DEFAULT 'Applied',
+
+            notes TEXT,
+
+            applied_date TEXT DEFAULT CURRENT_TIMESTAMP,
+
+            FOREIGN KEY(user_id)
+                REFERENCES users(id),
+
+            FOREIGN KEY(job_id)
+                REFERENCES jobs(id)
 
         )
 

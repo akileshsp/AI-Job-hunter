@@ -1,3 +1,4 @@
+import json
 import requests
 
 from app.job_sources.base_job_source import BaseJobSource
@@ -6,13 +7,14 @@ from app.models.job import Job
 
 class LeverAPI(BaseJobSource):
 
-    COMPANIES = [
-        "figma",
-        "canva",
-        "postman",
-        "miro",
-        "scale-ai"
-    ]
+    def __init__(self):
+
+        try:
+            with open("config/lever_companies.json", "r") as f:
+                self.companies = json.load(f)
+        except Exception as e:
+            print(f"❌ Failed to load lever_companies.json: {e}")
+            self.companies = []
 
     def search(self, keyword="", location=""):
 
@@ -20,38 +22,59 @@ class LeverAPI(BaseJobSource):
 
         keyword = keyword.lower().strip()
 
-        for company in self.COMPANIES:
+        headers = {
+            "User-Agent": "Mozilla/5.0"
+        }
 
-            print(f"🟣 Lever :: {company}")
+        for company in self.companies:
+
+            slug = company["slug"]
+
+            print(f"🟣 Lever :: {slug}")
 
             try:
 
+                url = f"https://api.lever.co/v0/postings/{slug}?mode=json"
+
                 response = requests.get(
-                    f"https://api.lever.co/v0/postings/{company}?mode=json",
-                    timeout=10
+                    url,
+                    headers=headers,
+                    timeout=20
                 )
 
                 if response.status_code != 200:
+                    print(f"❌ {slug} -> {response.status_code}")
                     continue
 
-                for item in response.json():
+                data = response.json()
+
+                for item in data:
 
                     title = item.get("text", "")
-
-                    description = item.get(
-                        "descriptionPlain",
-                        ""
-                    )
+                    description = item.get("descriptionPlain", "")
 
                     searchable = (
-                        title + " " + description
+                        f"{title} {description}"
                     ).lower()
 
+                    # Keyword Filter
                     if keyword:
 
-                        if keyword not in searchable:
+                        words = [
+                            w.strip().lower()
+                            for w in keyword.split()
+                            if w.strip()
+                        ]
 
-                            continue
+                        if words:
+
+                            if not any(
+                                word in searchable
+                                for word in words
+                            ):
+                                continue
+
+                    categories = item.get("categories", {})
 
                     jobs.append(
 
@@ -59,12 +82,9 @@ class LeverAPI(BaseJobSource):
 
                             title=title,
 
-                            company=company.title(),
+                            company=company["company"],
 
-                            location=item.get(
-                                "categories",
-                                {}
-                            ).get(
+                            location=categories.get(
                                 "location",
                                 location
                             ),
@@ -76,7 +96,12 @@ class LeverAPI(BaseJobSource):
                                 ""
                             ),
 
-                            description=description
+                            description=description,
+
+                            employment_type=categories.get(
+                                "commitment",
+                                ""
+                            )
 
                         )
 
@@ -84,7 +109,7 @@ class LeverAPI(BaseJobSource):
 
             except Exception as e:
 
-                print(e)
+                print(f"❌ {slug}: {e}")
 
         print(f"✅ Lever returned {len(jobs)} jobs")
 

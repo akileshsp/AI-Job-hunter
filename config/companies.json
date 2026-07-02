@@ -2,31 +2,377 @@
     {
         "company": "Viatris",
         "slug": "viatris",
-        "industry": "pharma",
-        "ats": ["greenhouse"]
+        "industry": "Pharmaceutical",
+        "ats": [
+            "workday"
+        ]
     },
     {
-        "company": "Haleon",
-        "slug": "haleon",
-        "industry": "pharma",
-        "ats": ["greenhouse"]
+        "company": "Pfizer",
+        "slug": "pfizer",
+        "industry": "Pharmaceutical",
+        "ats": [
+            "workday"
+        ]
+    },
+    {
+        "company": "GSK",
+        "slug": "gsk",
+        "industry": "Pharmaceutical",
+        "ats": [
+            "workday"
+        ]
+    },
+    {
+        "company": "Sanofi",
+        "slug": "sanofi",
+        "industry": "Pharmaceutical",
+        "ats": [
+            "workday"
+        ]
+    },
+    {
+        "company": "Bayer",
+        "slug": "bayer",
+        "industry": "Pharmaceutical",
+        "ats": [
+            "workday"
+        ]
     },
     {
         "company": "Roche",
         "slug": "roche",
-        "industry": "pharma",
-        "ats": ["greenhouse"]
+        "industry": "Pharmaceutical",
+        "ats": [
+            "smartrecruiters"
+        ]
+    },
+    {
+        "company": "Novartis",
+        "slug": "novartis",
+        "industry": "Pharmaceutical",
+        "ats": [
+            "workday"
+        ]
+    },
+    {
+        "company": "Abbott",
+        "slug": "abbott",
+        "industry": "Medical Devices",
+        "ats": [
+            "workday"
+        ]
+    },
+    {
+        "company": "Medtronic",
+        "slug": "medtronic",
+        "industry": "Medical Devices",
+        "ats": [
+            "workday"
+        ]
+    },
+    {
+        "company": "Stryker",
+        "slug": "stryker",
+        "industry": "Medical Devices",
+        "ats": [
+            "workday"
+        ]
+    },
+    {
+        "company": "GE HealthCare",
+        "slug": "gehealthcare",
+        "industry": "Medical Devices",
+        "ats": [
+            "workday"
+        ]
+    },
+    {
+        "company": "Thermo Fisher Scientific",
+        "slug": "thermofisher",
+        "industry": "Medical Devices",
+        "ats": [
+            "workday"
+        ]
+    },
+    {
+        "company": "Danaher",
+        "slug": "danaher",
+        "industry": "Medical Devices",
+        "ats": [
+            "smartrecruiters"
+        ]
+    },
+    {
+        "company": "Philips",
+        "slug": "philips",
+        "industry": "Medical Devices",
+        "ats": [
+            "smartrecruiters"
+        ]
+    },
+    {
+        "company": "Bosch",
+        "slug": "bosch",
+        "industry": "Engineering",
+        "ats": [
+            "smartrecruiters"
+        ]
     },
     {
         "company": "Amcor",
         "slug": "amcor",
-        "industry": "packaging",
-        "ats": ["greenhouse"]
+        "industry": "Packaging",
+        "ats": [
+            "workday"
+        ]
+    },
+    {
+        "company": "Huhtamaki",
+        "slug": "huhtamaki",
+        "industry": "Packaging",
+        "ats": [
+            "workday"
+        ]
+    },
+    {
+        "company": "Gerresheimer",
+        "slug": "gerresheimer",
+        "industry": "Packaging",
+        "ats": [
+            "workday"
+        ]
+    },
+    {
+        "company": "SCHOTT",
+        "slug": "schott",
+        "industry": "Packaging",
+        "ats": [
+            "workday"
+        ]
+    },
+    {
+        "company": "West Pharmaceutical Services",
+        "slug": "westpharma",
+        "industry": "Packaging",
+        "ats": [
+            "workday"
+        ]
+    },
+    {
+        "company": "Berry Global",
+        "slug": "berryglobal",
+        "industry": "Packaging",
+        "ats": [
+            "workday"
+        ]
+    },
+    {
+        "company": "Sonoco",
+        "slug": "sonoco",
+        "industry": "Packaging",
+        "ats": [
+            "workday"
+        ]
+    },
+    {
+        "company": "Aptar",
+        "slug": "aptar",
+        "industry": "Packaging",
+        "ats": [
+            "workday"
+        ]
+    },
+    {
+        "company": "Constantia Flexibles",
+        "slug": "constantia",
+        "industry": "Packaging",
+        "ats": [
+            "workday"
+        ]
     },
     {
         "company": "Mondi",
         "slug": "mondi",
-        "industry": "packaging",
-        "ats": ["greenhouse"]
+        "industry": "Packaging",
+        "ats": [
+            "workday"
+        ]
+    },
+    {
+        "company": "Smurfit Westrock",
+        "slug": "smurfitwestrock",
+        "industry": "Packaging",
+        "ats": [
+            "workday"
+        ]
+    },
+    {
+        "company": "Unilever",
+        "slug": "unilever",
+        "industry": "FMCG",
+        "ats": [
+            "workday"
+        ]
+    },
+    {
+        "company": "Nestlé",
+        "slug": "nestle",
+        "industry": "FMCG",
+        "ats": [
+            "workday"
+        ]
+    },
+    {
+        "company": "Mondelēz",
+        "slug": "mondelez",
+        "industry": "FMCG",
+        "ats": [
+            "workday"
+        ]
+    },
+    {
+        "company": "PepsiCo",
+        "slug": "pepsico",
+        "industry": "FMCG",
+        "ats": [
+            "workday"
+        ]
+    },
+    {
+        "company": "Coca-Cola",
+        "slug": "cocacola",
+        "industry": "FMCG",
+        "ats": [
+            "workday"
+        ]
+    },
+    {
+        "company": "Reckitt",
+        "slug": "reckitt",
+        "industry": "FMCG",
+        "ats": [
+            "workday"
+        ]
+    },
+    {
+        "company": "Procter & Gamble",
+        "slug": "pg",
+        "industry": "FMCG",
+        "ats": [
+            "workday"
+        ]
+    },
+    {
+        "company": "ITC",
+        "slug": "itc",
+        "industry": "FMCG",
+        "ats": [
+            "workday"
+        ]
+    },
+    {
+        "company": "Britannia",
+        "slug": "britannia",
+        "industry": "FMCG",
+        "ats": [
+            "workday"
+        ]
+    },
+    {
+        "company": "Dabur",
+        "slug": "dabur",
+        "industry": "FMCG",
+        "ats": [
+            "workday"
+        ]
+    },
+    {
+        "company": "Marico",
+        "slug": "marico",
+        "industry": "FMCG",
+        "ats": [
+            "workday"
+        ]
+    },
+    {
+        "company": "Stripe",
+        "slug": "stripe",
+        "industry": "Software",
+        "ats": [
+            "greenhouse"
+        ]
+    },
+    {
+        "company": "Figma",
+        "slug": "figma",
+        "industry": "Software",
+        "ats": [
+            "greenhouse"
+        ]
+    },
+    {
+        "company": "Dropbox",
+        "slug": "dropbox",
+        "industry": "Software",
+        "ats": [
+            "greenhouse"
+        ]
+    },
+    {
+        "company": "Coinbase",
+        "slug": "coinbase",
+        "industry": "Software",
+        "ats": [
+            "greenhouse"
+        ]
+    },
+    {
+        "company": "Datadog",
+        "slug": "datadog",
+        "industry": "Software",
+        "ats": [
+            "greenhouse"
+        ]
+    },
+    {
+        "company": "GitLab",
+        "slug": "gitlab",
+        "industry": "Software",
+        "ats": [
+            "greenhouse"
+        ]
+    },
+    {
+        "company": "Spotify",
+        "slug": "spotify",
+        "industry": "Software",
+        "ats": [
+            "lever"
+        ]
+    },
+    {
+        "company": "Coupa",
+        "slug": "coupa",
+        "industry": "Software",
+        "ats": [
+            "lever"
+        ]
+    },
+    {
+        "company": "OpenAI",
+        "slug": "openai",
+        "industry": "AI",
+        "ats": [
+            "ashby"
+        ]
+    },
+    {
+        "company": "Notion",
+        "slug": "notion",
+        "industry": "Software",
+        "ats": [
+            "ashby"
+        ]
     }
 ]

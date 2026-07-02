@@ -8,8 +8,11 @@ class JobRanker:
 
             title = (job.title or "").lower()
             location = (job.location or "").lower()
+            description = (job.description or "").lower()
 
-            # Senior roles
+            searchable = f"{title} {description}"
+
+            # Seniority
             if "senior" in title:
                 total += 15
 
@@ -22,13 +25,40 @@ class JobRanker:
             if "manager" in title:
                 total += 10
 
-            # Remote bonus
-            if "remote" in location:
-                total += 5
+            # Domain relevance
+            keywords = {
+                "packaging": 25,
+                "label": 20,
+                "labeling": 20,
+                "artwork": 20,
+                "prepress": 20,
+                "print": 15,
+                "quality": 15,
+                "regulatory": 15,
+                "pharma": 15,
+                "medical": 10,
+                "engineer": 10,
+                "designer": 10,
+                "specialist": 10
+            }
 
-            # Hybrid bonus
-            if "hybrid" in location:
-                total += 3
+            for word, points in keywords.items():
+
+                if word in searchable:
+                    total += points
+
+            # Location priority
+            if "bengaluru" in location or "bangalore" in location:
+                total += 30
+
+            elif "india" in location:
+                total += 20
+
+            elif "remote" in location:
+                total += 15
+
+            elif "hybrid" in location:
+                total += 10
 
             return total
 
